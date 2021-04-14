@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  
+  pgdb:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root911
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  djangoecommerce:
+    image: djangoecommerce
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8000:8000
+    environment: 
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=root911
+      - DB_HOST=pgdb
+      - DB_PORT=5432
+      - SECRET_KEY=djannpbjl!rg1^^%k8cw3o-h!fy7omy3y2ii^pvnj^96t&%2$c&3r$$
+    volumes:
+      - .:/app
+    depends_on: 
+      - pgdb
+    command: python manage.py runserver 0.0.0.0:8000
+

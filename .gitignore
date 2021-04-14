@@ -118,3 +118,8 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+
+# Removing Postgres data volume #
+db
+db/*

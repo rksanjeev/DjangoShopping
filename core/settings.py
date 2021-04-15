@@ -64,7 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'store.views.categories',
+                'store.context_processors.categories',
             ],
         },
     },
@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+PGDB_CONF = {
 'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get('DB_NAME', 'postgres'),
@@ -86,6 +86,15 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
+
+SQLITE_CONF = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME'  : BASE_DIR/'db.sqlite3'
+    }
+}
+
+DATABASES = PGDB_CONF if os.environ.get('HOSTTYPE') == 'Docker' else SQLITE_CONF
 
 
 # Password validation

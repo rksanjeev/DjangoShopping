@@ -17,6 +17,10 @@ class Category(models.Model):
         return reverse('store:category_list', args=[self.slug])
 
     
+    def get_absolute_url(self, slug):
+        return reverse('store:category_list', args=[self.slug])
+    
+
     def __str__(self) -> str:
         return self.name
 
@@ -25,7 +29,7 @@ class Product(models.Model):
     Category = models.ForeignKey(Category, related_name='product', on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, related_name='creator', on_delete=models.DO_NOTHING)  
     title = models.CharField(max_length=60)
-    author = models.CharField(max_length=60, default='admin')
+    make = models.CharField(max_length=60, default='Unknown')
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to = 'images/')
     slug = models.SlugField(max_length=255, unique=True)

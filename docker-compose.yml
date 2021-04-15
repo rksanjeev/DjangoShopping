@@ -27,6 +27,7 @@ services:
       - DB_HOST=pgdb
       - DB_PORT=5432
       - SECRET_KEY=djannpbjl!rg1^^%k8cw3o-h!fy7omy3y2ii^pvnj^96t&%2$c&3r$$
+      - HOSTTYPE=Docker
     volumes:
       - .:/app
     depends_on: 

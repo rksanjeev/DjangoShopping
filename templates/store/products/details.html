@@ -26,10 +26,10 @@
                             <div class="col-6">
                                 <label for="select">Qty</label>
                                 <select id="select">
-                                    <option value="">1</option>
-                                    <option value="">2</option>
-                                    <option value="">3</option>
-                                    <option value="">4</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
                                 </select>
 
                             </div>
@@ -50,12 +50,14 @@
 <script>
     $(document).on('click', '#add-to-cart', function(e){
         e.preventDefault();
+        // console.log($('#select option:selected').val());
         $.ajax({
             type: 'POST',
-            url: '{% url "cart_add_item" %}',
+            url: '{% url "kart:cart_add_item" %}',
             data:{
                 productid: $('#add-to-cart').val(),
-                csrfmiddlewaretolen: "{{csrf_token}}",
+                productqty: $('#select option:selected').val(),
+                csrfmiddlewaretoken: "{{csrf_token}}",
                 action:'post'
             },
             success: function(res){},

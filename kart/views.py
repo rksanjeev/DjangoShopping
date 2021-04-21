@@ -15,5 +15,6 @@ def cart_add_item(request):
         product_qty = int(request.POST.get('productqty'))
         product = get_object_or_404(Product, id=product_id)
         cart.add(product=product, quantity=product_qty)
-    response = JsonResponse({'a':'b'})
+    cart_qty = cart.size()
+    response = JsonResponse({'qty':cart_qty})
     return response

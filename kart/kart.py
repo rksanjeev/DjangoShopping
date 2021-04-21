@@ -4,9 +4,9 @@ class Kart():
 
     def __init__(self, request) -> None:
         self.session = request.session
-        cart = self.session.get('session_data')
-        if 'session_data' not in request.session:
-            cart = self.session['session_data'] = {}
+        cart = self.session.get('skey')
+        if 'skey' not in request.session:
+            cart = self.session['skey'] = {}
         self.cart = cart
 
     def add(self, product, quantity=1):
@@ -17,10 +17,7 @@ class Kart():
     
     def size(self):
         ''' Calculate total item quantity in a cart'''
-        print([item for item in self.cart.values()])
-        total_qty = sum(item['qty'] for item in self.cart.values())
-        print(total_qty)
-        return total_qty
+        return sum(item['qty'] for item in self.cart.values())
         
 
 

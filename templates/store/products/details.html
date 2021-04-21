@@ -60,7 +60,9 @@
                 csrfmiddlewaretoken: "{{csrf_token}}",
                 action:'post'
             },
-            success: function(res){},
+            success: function(res){
+                document.getElementById("cart-qty").innerHTML = res.qty
+            },
             error: function(xhr, msg, err){}
         });
     })

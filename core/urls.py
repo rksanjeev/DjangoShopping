@@ -22,8 +22,8 @@ from django.urls.conf import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('store.urls', namespace='store') ),
-    
+    path('',     include('store.urls', namespace='store') ),
+    path('kart/', include('kart.urls', namespace='kart')),
 ]
 
 if settings.DEBUG:

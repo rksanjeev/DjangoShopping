@@ -17,7 +17,7 @@ class Category(models.Model):
         return reverse('store:category_list', args=[self.slug])
 
     
-    def get_absolute_url(self, slug):
+    def get_absolute_url(self):
         return reverse('store:category_list', args=[self.slug])
     
 

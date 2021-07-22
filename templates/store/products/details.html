@@ -26,15 +26,18 @@
                             <div class="col-6">
                                 <label for="select">Qty</label>
                                 <select id="select">
-                                    <option value="">1</option>
-                                    <option value="">2</option>
-                                    <option value="">3</option>
-                                    <option value="">4</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
                                 </select>
 
                             </div>
-                            <div class="col-6 text-end"><button type="button" class="btn btn-secondary btn-sm">Add to
-                                    basket</button></div>
+                            <div class="col-6 text-end">
+                                <button type="button" class="btn btn-secondary btn-sm" id = "add-to-cart" value={{product.id}}>
+                                    Add to basket
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -43,4 +46,27 @@
     </main>
 
 </div>
+
+<script>
+    $(document).on('click', '#add-to-cart', function(e){
+        e.preventDefault();
+        // console.log($('#select option:selected').val());
+        $.ajax({
+            type: 'POST',
+            url: '{% url "kart:cart_add_item" %}',
+            data:{
+                productid: $('#add-to-cart').val(),
+                productqty: $('#select option:selected').val(),
+                csrfmiddlewaretoken: "{{csrf_token}}",
+                action:'post'
+            },
+            success: function(res){
+                document.getElementById("cart-qty").innerHTML = res.qty
+            },
+            error: function(xhr, msg, err){}
+        });
+    })
+</script>
+
+
 {% endblock %}

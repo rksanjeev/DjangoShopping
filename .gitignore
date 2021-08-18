@@ -123,3 +123,6 @@ GitHub.sublime-settings
 # Removing Postgres data volume #
 db
 db/*
+
+venv/
+migrations/

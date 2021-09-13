@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect
@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserUpdateForm
 from .models import UserBase
 from .token import activation_token
 
@@ -40,7 +40,6 @@ def register_account(request):
     return render(request, 'account/registration/register.html', {'form': registerForm})
 
 
-
 def activate_account(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -56,6 +55,28 @@ def activate_account(request, uidb64, token):
         return render(request, 'account/registration/activation_invalid.html')
 
 
+# Account Specific Operations
+
 @login_required
 def dashboard(request):
     return render(request, 'account/user/dashboard.html')
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = UserUpdateForm(instance=request.user, data=request.post)
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+    return render(request, 'account/user/edit_profile.html', {'user_form': user_form})
+
+
+@login_required
+def delete_profile(request):
+    user = UserBase.objects.get(user_name=request.user)
+    user.is_active = False
+    user.save()
+    logout(request)
+    return redirect('/')

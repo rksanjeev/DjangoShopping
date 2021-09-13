@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-
+from django_countries.fields import CountryField
 from .models import UserBase
 
 
@@ -52,4 +52,44 @@ class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(
         {'class': 'form-control mb-3', 'placeholder': 'Username', 'id': 'login-user'}))
     password = forms.CharField(widget=forms.PasswordInput(
-        {'class': 'form-control mb-3', 'placeholder': 'Password', 'id':'login-pwd'}))
+        {'class': 'form-control mb-3', 'placeholder': 'Password', 'id': 'login-pwd'}))
+
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(
+        label='Account email (can not be changed)', max_length=200, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'email', 'id': 'form-email', 'readonly': 'readonly'}))
+
+    user_name = forms.CharField(
+        label='Firstname', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Username', 'id': 'form-firstname',
+                   'readonly': 'readonly'}))
+
+    full_name = forms.CharField(
+        label='Full Name', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Name', 'id': 'form-name'}))
+
+    phone_number = forms.CharField(label='Phone Number', min_length=10, max_length=10, widget=forms.TextInput(
+        attrs={'class': 'form-control mb-3', 'placeholder': '9900990099', 'id': 'form-phone'}))
+
+    address1 = forms.CharField(
+        label='Address', min_length=4, max_length=165, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Address Line 1', 'id': 'form-address'})
+    )
+    postcode = forms.CharField(label='Postal Code', min_length=6, max_length=6, widget=forms.TextInput(
+        attrs={'class': 'form-control mb-3', 'placeholder': '110001', 'id': 'form-postcode'}))
+
+    address2 = forms.CharField(label='Address Line 2', min_length=0, max_length=165, widget=forms.TextInput(
+        attrs={'class': 'form-control mb-3', 'placeholder': 'Address Line 2', 'id': 'form-address2'}))
+
+    town_city = forms.CharField(label='City', min_length=4, max_length=50, widget=forms.TextInput(
+        attrs={'class': 'form-control mb-3', 'placeholder': 'City', 'id': 'form-city'}))
+
+    class Meta:
+        model = UserBase
+        fields = ('full_name', 'user_name', 'email', 'phone_number', 'address1', 'address2', 'town_city', 'country')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user_name'].required = True
+        self.fields['email'].required = True

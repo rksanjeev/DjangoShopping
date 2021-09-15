@@ -1,6 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
-from django_countries.fields import CountryField
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from .models import UserBase
 
 
@@ -93,3 +92,23 @@ class UserUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user_name'].required = True
         self.fields['email'].required = True
+
+
+class UserPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        label='Account email (can not be changed)', max_length=200, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'email', 'id': 'form-email', 'readonly': 'readonly'}))
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        user = UserBase.objects.filter(email=email)
+        if not user:
+            raise forms.ValidationError('This email address is invalid!')
+        return email
+
+
+class UserPasswordConfirmForm(SetPasswordForm):
+    newpassword1 = forms.CharField(widget=forms.PasswordInput(
+        {'class': 'form-control mb-3', 'placeholder': 'Enter New Password', 'id': 'form-new-pwd1'}))
+    newpassword2 = forms.CharField(widget=forms.PasswordInput(
+        {'class': 'form-control mb-3', 'placeholder': 'Repeat Password', 'id': 'form-new-pwd2'}))

@@ -13,3 +13,4 @@ sqlparse==0.4.1
 testfixtures==6.17.1
 toml==0.10.2
 six
+stripe
